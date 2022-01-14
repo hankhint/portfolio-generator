@@ -1,4 +1,14 @@
-const fs = require("fs");
+
+//removing this fs require because we are now importing the code from generate-site
+//const fs = require("fs");
+
+//imports file writing from generate-site.js
+//const generateSite = require('./utils/generate-site.js');
+//object destructuring
+/* Because we exported an object from generate-site.js, we can use object destructuring to create variables out of those properties instead of having to use dot notation! This isn't a must, but for the sake of keeping the code looking clean, this is a lot nicer than using objectName.methodName() notation to run the functionality.
+ */const { writeFile, copyFile } = require('./utils/generate-site.js');
+
+
 const inquirer = require("inquirer");
 const generatePage = require("./src/page-template");
 
@@ -147,26 +157,40 @@ Add a New Project
 //   .then(answers => console.log(answers))
 //   .then(promptProject)
 //   .then(projectAnswers => console.log(projectAnswers));
+// promptUser()
+//   .then(promptProject)
+//   .then(portfolioData => {
+//     return generatePage(portfolioData);
+//   })
+//   .then(pageHTML => {
+//     return writeFile(pageHTML);
+//   })
+//   .then(writeFileResponse => {
+//     console.log(writeFileResponse);
+//     return copyFile();
+//   })
+//   .then(copyFileResponse => {
+//     console.log(copyFileResponse);
+//   })
+//   .catch(err => {
+//     console.log(err);
+//   });
+
 promptUser()
   .then(promptProject)
-  .then((portfolioData) => {
-    const pageHTML = generatePage(portfolioData);
-
-    fs.writeFile("./dist/index.html", pageHTML, (err) => {
-      if (err) {
-        console.log(err);
-        return;
-      }
-      console.log(
-        "Page created! Check out index.html in this directory to see it!"
-      );
-
-      fs.copyFile("./src/style.css", "./dist/style.css", (err) => {
-        if (err) {
-          console.log(err);
-          return;
-        }
-        console.log("Style sheet copied successfully!");
-      });
-    });
+  .then(portfolioData => {
+    return generatePage(portfolioData);
+  })
+  .then(pageHTML => {
+    return writeFile(pageHTML);
+  })
+  .then(writeFileResponse => {
+    console.log(writeFileResponse);
+    return copyFile();
+  })
+  .then(copyFileResponse => {
+    console.log(copyFileResponse);
+  })
+  .catch(err => {
+    console.log(err);
   });
